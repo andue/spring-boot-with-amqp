@@ -11,6 +11,7 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,7 @@ public class Application {
 
 	@Bean
 	Queue queue() {
-		return new Queue(queueName, false);
+		return new Queue(queueName, true);
 	}
 
 	@Bean
@@ -44,6 +45,9 @@ public class Application {
 		return BindingBuilder.bind(queue).to(exchange).with(queueName);
 	}
 
+	@Value("${concurrent.consumers}")
+	private int concurrentConsumers;
+
 	@Bean
 	@Profile(Application.RECEIVER_PROFILE)
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
@@ -51,6 +55,7 @@ public class Application {
 		container.setConnectionFactory(connectionFactory);
 		container.setQueueNames(queueName);
 		container.setMessageListener(listenerAdapter);
+		container.setConcurrentConsumers(concurrentConsumers);
 		return container;
 	}
 
@@ -75,5 +80,5 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(Application.class, args);
     }
-	
+
 }

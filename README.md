@@ -29,7 +29,8 @@ java -jar -Dspring.profiles.active=sender target/spring-boot-with-amqp-1.0-SNAPS
 ```
 java -jar -Dspring.profiles.active=receiver target/spring-boot-with-amqp-1.0-SNAPSHOT.jar
 ```
-(by appending "--processing.time=<value>" you can modify the (faked) processing time for consuming a message)
+(by appending "--processing.time=<value>" you can modify the (faked) processing time for consuming a message;
+by appending "--concurrent.consumers" you can modify the consumers within this instance - defaults to 1)
 
 #### Examine the state of your queue
 Login to http://localhost:15672 in your browser (credentials guest/guest)

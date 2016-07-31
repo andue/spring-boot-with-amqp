@@ -12,7 +12,8 @@ public class Receiver {
 	int processingTime;
 
 	public void receiveMessage(MyMessage message) {
-		System.out.println("Received <" + message + ">");
+		String threadName = Thread.currentThread().getName();
+		System.out.println("Received <" + message + "> by thread "+threadName);
 		try {
 			Thread.sleep(processingTime);
 		} catch (InterruptedException e) {
